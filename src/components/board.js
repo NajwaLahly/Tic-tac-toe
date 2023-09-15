@@ -7,18 +7,34 @@ import { useState } from 'react';
 export default function Board() {
     const [squares, setSquares] = useState(Array(9).fill(null));
     const [xIsNext, setXIsNext] = useState(true);
+    const [status, setStatus] = useState('Next player is : X');
+
 
     function onSquareClick(index){
-        if (squares[index] || calculateWinner(squares)) {
+        if (calculateWinner(squares) || !squares.includes(null) || squares[index]){
             return;
         }
+        
         const nextSquares = squares.slice();
         nextSquares[index] = xIsNext ? "X" : "O";
-
         setSquares(nextSquares);
 
-        console.log(calculateWinner(nextSquares));
-        setXIsNext(!xIsNext);
+
+        if(!nextSquares.includes(null)){
+            setStatus("Game is over")
+            return;
+        }
+
+        const winner = calculateWinner(nextSquares);
+        if (winner){
+            setStatus('Winner is : ' + winner);
+            return;
+        }
+
+        const newPlayer = !xIsNext;
+
+        setXIsNext(newPlayer);
+        setStatus(newPlayer? 'Next player is : X' : 'Next player is : O');
     }
 
     function calculateWinner(squares) {
@@ -39,14 +55,6 @@ export default function Board() {
           }
         }
         return null;
-      }
-
-      const winner = calculateWinner(squares);
-      let status;
-      if (winner) {
-        status = "Winner is : " + winner;
-      } else {
-        status = "Next player : " + (xIsNext ? "X" : "O");
       }
 
     return (
