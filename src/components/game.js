@@ -10,7 +10,7 @@ export default function Game() {
 
     function onSquareClick(index){
 
-        const newSquares = history[history.length - 1];
+        const newSquares = history[history.length - 1].slice();
 
 
         if (calculateWinner(newSquares) || !newSquares.includes(null) || newSquares[index]){
